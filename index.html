@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise For You</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #ffe3e3 0%, #ffd1d1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(224, 86, 86, 0.2);
+            text-align: center;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .slide {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        .slide.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #d1345b;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .btn {
+            background: #d1345b;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(209, 52, 91, 0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .btn:hover {
+            background: #b32548;
+            transform: scale(1.05);
+        }
+        .image-placeholder {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #ffb3b3;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .heart {
+            color: #d1345b;
+            font-size: 4rem;
+            animation: beat 1s infinite alternate;
+            margin-bottom: 20px;
+        }
+        @keyframes beat {
+            to { transform: scale(1.15); }
+        }
+        .floating-heart {
+            position: absolute;
+            color: rgba(209, 52, 91, 0.15);
+            font-size: 20px;
+            pointer-events: none;
+            animation: float Up 4s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn-no {
+            background: #888;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-no:hover {
+            background: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- SLIDE 1: Welcome -->
+        <div class="slide active" id="slide1">
+            <div class="heart">❤️</div>
+            <h1>Hey [Drashti]!</h1>
+            <p>I made something special just for you. Click below to open your present...</p>
+            <button class="btn" onclick="nextSlide(2)">Open Present 🎁</button>
+        </div>
+
+        <!-- SLIDE 2: Her Photo & Message -->
+        <div class="slide" id="slide2">
+            <div class="image src=C:\Users\RAHUL PASAYA\Pictures">
+                <!-- Replace 'your-girlfriend-image.jpg' with an actual photo URL later -->
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500" alt="Beautiful">
+            </div>
+            <h1>You are Incredible</h1>
+            <p>Every single day, you make my world a little brighter. I am so lucky to have you in my life, [Her Name].</p>
+            <button class="btn" onclick="nextSlide(3)">Next Secret ✨</button>
+        </div>
+
+        <!-- SLIDE 3: The Big Question -->
+        <div class="slide" id="slide3">
+            <div class="heart">💖</div>
+            <h1>A Quick Question...</h1>
+            <p>Will you be my date this weekend (and forever)?</p>
+            <div class="btn-group">
+                <button class="btn" onclick="nextSlide(4)">Yes! 🥰</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveNoButton()">No 😢</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Final Love Slide -->
+        <div class="slide" id="slide4">
+            <div class="heart">💝</div>
+            <h1>Yay! I Love You!</h1>
+            <p>You've made me the happiest person alive. Sending you a million digital hugs and kisses! 😘</p>
+        </div>
+    </div>
+
+    <script>
+        function nextSlide(slideNumber) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            // Show target slide
+            document.getElementById('slide' + slideNumber).classList.add('active');
+            
+            // Trigger confetti/hearts if final slide
+            if(slideNumber === 4) {
+                setInterval(createFloatingHeart, 300);
+            }
+        }
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+    </style>
+</body>
+</html>
